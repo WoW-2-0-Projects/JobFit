@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using JobFit.Application.Common.EventBus.Brokers;
+using JobFit.Domain.Common.Constants;
 using JobFit.Infrastructure.Common.Brokers;
 
 using JobFit.Persistence.DataContext;
@@ -36,8 +37,8 @@ public static partial class HostConfigurations
     private static WebApplicationBuilder AddPersistence(this WebApplicationBuilder builder)
     { 
         var dbConnectionString = builder.Environment.IsDevelopment()
-            ? Environment.GetEnvironmentVariable("DbConnectionString")
-            : builder.Configuration.GetConnectionString("DbConnectionString");
+            ? Environment.GetEnvironmentVariable(DataAccessConstants.DbConnectionString)
+            : builder.Configuration.GetConnectionString(DataAccessConstants.DbConnectionString);
 
         builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(dbConnectionString));
         
