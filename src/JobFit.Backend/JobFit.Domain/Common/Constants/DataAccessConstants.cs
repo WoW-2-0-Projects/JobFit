@@ -9,4 +9,7 @@ public static class DataAccessConstants
     /// Database connection string constant
     /// </summary>
     public const string DbConnectionString = "DbConnectionString";
+    
+    public const string RedisConnectionString = "RedisConnectionString";
+
 }
