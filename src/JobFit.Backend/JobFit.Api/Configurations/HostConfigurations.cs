@@ -12,6 +12,7 @@ public static partial class HostConfiguration
             .AddCaching()
             .AddMappers()
             .AddPersistence()
+            .AddInfraComms()
             .AddMediator()
             // .AddCors()
             .AddDevTools()

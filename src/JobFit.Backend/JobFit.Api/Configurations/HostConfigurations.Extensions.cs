@@ -1,13 +1,17 @@
 ﻿using System.Reflection;
 using JobFit.Api.Formatters.RequestFormatters;
+using JobFit.Application.Common.EventBus.Brokers;
 using JobFit.Application.Common.Serializers.Brokers;
 using JobFit.Domain.Common.Constants;
 using JobFit.Infrastructure.Common.Caching.Brokers;
 using JobFit.Infrastructure.Common.Caching.Settings;
+using JobFit.Infrastructure.Common.EventBus.Brokers;
+using JobFit.Infrastructure.Common.EventBus.Extensions;
 using JobFit.Infrastructure.Common.Serializers.Brokers;
 using JobFit.Infrastructure.Common.Settings;
 using JobFit.Persistence.Caching.Brokers;
 using JobFit.Persistence.DataContext;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -54,7 +58,42 @@ public static partial class HostConfiguration
 
         return builder;
     }
+    /// <summary>
+    /// Registers infrastructure communication infrastructure.
+    /// </summary>
+    private static WebApplicationBuilder AddInfraComms(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddMassTransit(
+            configuration =>
+            {
+                var serviceProvider = configuration.BuildServiceProvider();
+                var jsonSerializerSettingsProvider =
+                    serviceProvider.GetRequiredService<IJsonSerializationSettingsProvider>();
 
+                configuration.RegisterAllConsumers(Assemblies);
+                configuration.UsingInMemory(
+                    (context, cfg) =>
+                    {
+                        cfg.ConfigureEndpoints(context);
+
+                        // Change default serializer to NewtonsoftJson
+                        cfg.UseNewtonsoftJsonSerializer();
+                        cfg.UseNewtonsoftJsonDeserializer();
+
+                        // Change default serializer settings
+                        cfg.ConfigureNewtonsoftJsonSerializer(settings =>
+                            jsonSerializerSettingsProvider.ConfigureForEventBus(settings));
+                        cfg.ConfigureNewtonsoftJsonDeserializer(settings =>
+                            jsonSerializerSettingsProvider.ConfigureForEventBus(settings));
+                    }
+                );
+            }
+        );
+
+        builder.Services.AddSingleton<IEventBusBroker, MassTransitEventBusBroker>();
+
+        return builder;
+    }
     /// <summary>
     /// Registers mapping services
     /// </summary>
