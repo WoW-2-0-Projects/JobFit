@@ -1,7 +1,7 @@
 using JobFit.Api.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Configure();
+await builder.ConfigureAsync();
 
 var app = builder.Build();
 await app.ConfigureAsync();
