@@ -2,12 +2,13 @@
 
 namespace JobFit.Domain.Common.Queries;
 
-public interface IQuery<out TResult> : IQuery, IRequest<TResult>
-{
-    
-}
+/// <summary>
+/// Defines a query that returns a result
+/// </summary>
+/// <typeparam name="TResult">The type of result returned by the query.</typeparam>
+public interface IQuery<out TResult> : IRequest<TResult>, IQuery;
 
-public interface IQuery
-{
-    
-}
+/// <summary>
+/// Defines a query
+/// </summary>
+public interface IQuery;
