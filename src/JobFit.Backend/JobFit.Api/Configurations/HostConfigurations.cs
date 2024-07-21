@@ -7,7 +7,9 @@ public static partial class HostConfigurations
         builder
             .AddDevTools()
             .AddExposers()
-            .AddPersistence();
+            .AddPersistence()
+            .AddMediator()
+            .AddEventBus();
         
         return builder;
     }
@@ -18,7 +20,7 @@ public static partial class HostConfigurations
             .UseDevTools()
             .UseExposers();
 
-        await app.MigrateDatabaseSchemaAsync();
+        // await app.MigrateDatabaseSchemaAsync();
 
         return app;
     }

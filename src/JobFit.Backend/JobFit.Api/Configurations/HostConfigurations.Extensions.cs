@@ -1,4 +1,8 @@
-﻿using JobFit.Persistence.DataContext;
+﻿using System.Reflection;
+using JobFit.Application.Common.EventBus.Brokers;
+using JobFit.Infrastructure.Common.Brokers;
+
+using JobFit.Persistence.DataContext;
 using JobFit.Persistence.Extensions;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,6 +10,13 @@ namespace JobFit.Api.Configurations;
 
 public static partial class HostConfigurations
 {
+    private static readonly ICollection<Assembly> Assemblies = Assembly
+        .GetExecutingAssembly()
+        .GetReferencedAssemblies()
+        .Select(Assembly.Load)
+        .Append(Assembly.GetExecutingAssembly())
+        .ToList();
+    
     private static WebApplicationBuilder AddDevTools(this WebApplicationBuilder builder)
     {
         builder.Services.AddEndpointsApiExplorer();
@@ -25,11 +36,26 @@ public static partial class HostConfigurations
     private static WebApplicationBuilder AddPersistence(this WebApplicationBuilder builder)
     { 
         var dbConnectionString = builder.Environment.IsDevelopment()
-            ? builder.Configuration.GetConnectionString("DbConnectionString")
-            : Environment.GetEnvironmentVariable("POSTGRESQLCONNSTR_DbConnectionString");
+            ? Environment.GetEnvironmentVariable("DbConnectionString")
+            : builder.Configuration.GetConnectionString("DbConnectionString");
 
         builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(dbConnectionString));
         
+        return builder;
+    }
+
+    private static WebApplicationBuilder AddMediator(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddMediatR(conf 
+            => {conf.RegisterServicesFromAssemblies(Assemblies.ToArray());});
+        
+        return builder;
+    }
+
+    private static WebApplicationBuilder AddEventBus(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddSingleton<IEventBusBroker, EventBusBroker>();
+
         return builder;
     }
     
