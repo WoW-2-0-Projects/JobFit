@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace JobFit.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240722005449_Add_User")]
+    [Migration("20240722063321_Add_User")]
     partial class Add_User
     {
         /// <inheritdoc />
