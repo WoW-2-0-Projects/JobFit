@@ -14,6 +14,7 @@ using JobFit.Infrastructure.Common.Serializers.Brokers;
 using JobFit.Infrastructure.Common.Settings;
 using JobFit.Infrastructure.Employees.Services;
 using JobFit.Persistence.Caching.Brokers;
+using JobFit.Persistence.Data;
 using JobFit.Persistence.DataContext;
 using JobFit.Persistence.Repositories;
 using JobFit.Persistence.Repositories.Interfaces;
@@ -225,6 +226,17 @@ public static partial class HostConfiguration
         var serviceScopeFactory = app.Services.GetRequiredKeyedService<IServiceScopeFactory>(null);
 
         await serviceScopeFactory.MigrateAsync<AppDbContext>();
+
+        return app;
+    }
+    
+    /// <summary>
+    /// Seeds application initial data
+    /// </summary>
+    private static async ValueTask<WebApplication> SeedDataAsync(this WebApplication app)
+    {
+        var serviceScope = app.Services.CreateScope();
+        await serviceScope.ServiceProvider.InitializeSeedAsync();
 
         return app;
     }
