@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using JobFit.Persistence.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace JobFit.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240722125014_Added SkillSet")]
+    partial class AddedSkillSet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,9 +40,6 @@ namespace JobFit.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text[]");
 
-                    b.Property<Guid>("RecruiterId")
-                        .HasColumnType("uuid");
-
                     b.Property<List<string>>("Skills")
                         .IsRequired()
                         .HasColumnType("text[]");
@@ -49,8 +49,6 @@ namespace JobFit.Persistence.Migrations
                         .HasColumnType("text[]");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RecruiterId");
 
                     b.ToTable("SkillSets");
                 });
@@ -107,22 +105,6 @@ namespace JobFit.Persistence.Migrations
                     b.HasBaseType("JobFit.Domain.Entities.User");
 
                     b.HasDiscriminator().HasValue("Recruiter");
-                });
-
-            modelBuilder.Entity("JobFit.Domain.Entities.SkillSet", b =>
-                {
-                    b.HasOne("JobFit.Domain.Entities.Recruiter", "Recruiter")
-                        .WithMany("SkillSets")
-                        .HasForeignKey("RecruiterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Recruiter");
-                });
-
-            modelBuilder.Entity("JobFit.Domain.Entities.Recruiter", b =>
-                {
-                    b.Navigation("SkillSets");
                 });
 #pragma warning restore 612, 618
         }
