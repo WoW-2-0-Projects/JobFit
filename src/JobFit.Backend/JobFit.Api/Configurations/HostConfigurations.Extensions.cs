@@ -1,16 +1,22 @@
 ﻿using System.Reflection;
 using JobFit.Api.Formatters.RequestFormatters;
 using JobFit.Application.Common.EventBus.Brokers;
+using JobFit.Application.Common.Identity.Services;
 using JobFit.Application.Common.Serializers.Brokers;
+using JobFit.Application.Employees.Services;
 using JobFit.Domain.Common.Constants;
 using JobFit.Infrastructure.Common.Caching.Brokers;
 using JobFit.Infrastructure.Common.Caching.Settings;
 using JobFit.Infrastructure.Common.EventBus.Brokers;
 using JobFit.Infrastructure.Common.EventBus.Extensions;
+using JobFit.Infrastructure.Common.Identity.Services;
 using JobFit.Infrastructure.Common.Serializers.Brokers;
 using JobFit.Infrastructure.Common.Settings;
+using JobFit.Infrastructure.Employees.Services;
 using JobFit.Persistence.Caching.Brokers;
 using JobFit.Persistence.DataContext;
+using JobFit.Persistence.Repositories;
+using JobFit.Persistence.Repositories.Interfaces;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -115,6 +121,35 @@ public static partial class HostConfiguration
     }
     
     /// <summary>
+    /// Registers identity infrastructure
+    /// </summary>
+    private static WebApplicationBuilder AddIdentityInfrastructure(this WebApplicationBuilder builder)
+    {
+        // Register repositories
+        builder.Services
+            .AddScoped<IUserRepository, UserRepository>();
+
+        // Register foundation services
+        builder.Services
+            .AddScoped<IUserService, UserService>();
+        
+        return builder;
+    }
+    /// <summary>
+    /// Registers employee infrastructure
+    /// </summary>
+    private static WebApplicationBuilder AddEmployeeInfrastructure(this WebApplicationBuilder builder)
+    {
+        // Register repositories
+        builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+        
+        // Register foundation services
+        builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+        
+        return builder;
+    }
+    
+    /// <summary>
     /// Registers mediatr infrastructure
     /// </summary>
     private static WebApplicationBuilder AddMediator(this WebApplicationBuilder builder)
@@ -139,15 +174,18 @@ public static partial class HostConfiguration
         builder.Services.AddCors(options => options.AddPolicy(HostConstants.AllowSpecificOrigins,
             policy =>
             {
-                policy.WithOrigins(corsSettings.AllowedOrigins);
-                    
-                if(corsSettings.AllowAnyHeaders)
+                if (corsSettings.AllowAnyOrigins)
+                    policy.AllowAnyOrigin();
+                else
+                    policy.WithOrigins(corsSettings.AllowedOrigins);
+
+                if (corsSettings.AllowAnyHeaders)
                     policy.AllowAnyHeader();
-                
-                if(corsSettings.AllowAnyMethods)
+
+                if (corsSettings.AllowAnyMethods)
                     policy.AllowAnyMethod();
-                
-                if(corsSettings.AllowCredentials)
+
+                if (corsSettings.AllowCredentials)
                     policy.AllowCredentials();
             }
         ));
