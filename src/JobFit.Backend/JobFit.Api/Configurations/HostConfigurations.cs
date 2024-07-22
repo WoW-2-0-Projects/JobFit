@@ -12,9 +12,11 @@ public static partial class HostConfiguration
             .AddCaching()
             .AddMappers()
             .AddPersistence()
+            .AddIdentityInfrastructure()
+            .AddEmployeeInfrastructure()
             .AddInfraComms()
             .AddMediator()
-            // .AddCors()
+            .AddCors()
             .AddDevTools()
             .AddExposers();
             
@@ -27,10 +29,10 @@ public static partial class HostConfiguration
     public static async  ValueTask<WebApplication> ConfigureAsync(this WebApplication app)
     {
         await app.MigrateDataBaseSchemasAsync();
-        // await app.SeedDataAsync();
+        await app.SeedDataAsync();
 
         app
-            // .UseCors()
+            .UseCors()
             .UseDevTools();
             // .UseLocalFileStorage();
         
