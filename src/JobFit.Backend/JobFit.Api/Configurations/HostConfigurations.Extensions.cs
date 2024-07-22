@@ -109,7 +109,7 @@ public static partial class HostConfiguration
     private static WebApplicationBuilder AddPersistence(this WebApplicationBuilder builder)
     {
         // Register data context
-        builder.Services.AddDbContext<AppDbContext>(options => { options.UseNpgsql(DataAccessConstants.DbConnectionString); });
+        builder.Services.AddDbContext<AppDbContext>(options => { options.UseNpgsql(builder.Configuration.GetConnectionString(DataAccessConstants.DbConnectionString)); });
 
         return builder;
     }

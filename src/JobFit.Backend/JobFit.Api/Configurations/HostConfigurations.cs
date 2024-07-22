@@ -26,7 +26,7 @@ public static partial class HostConfiguration
     /// </summary>
     public static async  ValueTask<WebApplication> ConfigureAsync(this WebApplication app)
     {
-        // await app.MigrateDataBaseSchemasAsync();
+        await app.MigrateDataBaseSchemasAsync();
         // await app.SeedDataAsync();
 
         app
