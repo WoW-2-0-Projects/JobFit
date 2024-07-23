@@ -17,14 +17,6 @@ public class StorageFileService(IStorageFileRepository storageFileRepository) : 
         return storageFileRepository.Get(predicate, queryOptions);
     }
 
-    public ValueTask<List<StorageFile>> GetByIdsAsync(
-        ICollection<Guid> fileIds,
-        QueryOptions queryOptions = default,
-        CancellationToken cancellationToken = default)
-    {
-        return storageFileRepository.GetByIdsAsync(fileIds, queryOptions, cancellationToken);
-    }
-
     public ValueTask<StorageFile?> GetByIdAsync(Guid fileId, QueryOptions queryOptions = default, CancellationToken cancellationToken = default)
     {
         return storageFileRepository.GetByIdAsync(fileId, queryOptions, cancellationToken);

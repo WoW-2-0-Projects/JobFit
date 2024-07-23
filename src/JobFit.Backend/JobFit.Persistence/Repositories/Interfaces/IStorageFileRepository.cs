@@ -17,17 +17,7 @@ public interface IStorageFileRepository
     /// <param name="queryOptions">Query options</param>
     /// <returns>Queryable source of storage files</returns>
     IQueryable<StorageFile> Get(Expression<Func<StorageFile, bool>>? predicate = default, QueryOptions queryOptions = default);
-
-    /// <summary>
-    /// Gets a collection of storage files based on an optional predicate and query options.
-    /// </summary>
-    /// <param name="fileIds">The collection of file IDs to query.</param>
-    /// <param name="queryOptions">Query options</param>
-    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
-    /// <returns>Collection of storage files</returns>
-    ValueTask<List<StorageFile>> GetByIdsAsync(ICollection<Guid> fileIds, QueryOptions queryOptions = default,
-        CancellationToken cancellationToken = default);
-
+    
     /// <summary>
     /// Gets a single storage file by its ID.
     /// </summary>

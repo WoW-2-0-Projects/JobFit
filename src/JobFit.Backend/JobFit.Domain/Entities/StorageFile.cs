@@ -26,11 +26,6 @@ public sealed class StorageFile : EntityBase, IAuditableEntity
     /// Gets or sets the extension of the file.
     /// </summary>
     public string Extension { get; set; } = default!;
-    
-    /// <summary>
-    /// Gets or sets a flag indicating whether to save the file only in cache.
-    /// </summary>
-    public bool IsTemporaryFile { get; set; }
 
     /// <summary>
     /// Gets or sets the ID of the file owner
