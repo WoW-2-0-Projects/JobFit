@@ -41,6 +41,8 @@ public sealed class StorageFile : EntityBase, IAuditableEntity
     /// Gets or sets the file size
     /// </summary>
     public ulong Size { get; set; }
+    
+    public Employee Owner { get; set; } = default!;
 
     /// <summary>
     /// Gets or sets the path parameters.
