@@ -7,9 +7,14 @@ public class AppDbContext(DbContextOptions<AppDbContext> dbContextOptions) : DbC
 {
     public DbSet<User> Users => Set<User>();
     public DbSet<Employee> Employees => Set<Employee>();
-
     public DbSet<Recruiter> Recruiters => Set<Recruiter>();
-    
+
+    #region StorageFiles
+
+    public DbSet<StorageFile> StorageFiles => Set<StorageFile>();
+
+    #endregion
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
