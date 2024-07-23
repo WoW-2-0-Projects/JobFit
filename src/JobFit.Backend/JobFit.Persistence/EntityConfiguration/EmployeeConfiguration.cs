@@ -8,6 +8,7 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
 {
     public void Configure(EntityTypeBuilder<Employee> builder)
     {
+        // Configure the one-to-many relationship
         builder.HasMany(employeeDocument => employeeDocument.Documents)
             .WithOne(owner => owner.Owner)
             .HasForeignKey(owner => owner.OwnerId);
