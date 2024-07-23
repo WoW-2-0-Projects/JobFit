@@ -212,7 +212,7 @@ public static partial class HostConfiguration
         builder.Services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
         builder.Services.AddRouting(options => options.LowercaseUrls = true);
         builder.Services
-            .AddControllers(options => { options.InputFormatters.Add(new DefaultTextInputFormatter()); })
+            .AddControllers(options => { options.InputFormatters.Add(new DefaultTextInputFormatter()); }) 
             .AddNewtonsoftJson();
 
         return builder;
@@ -266,6 +266,7 @@ public static partial class HostConfiguration
     /// </summary>
     private static WebApplication UseDevTools(this WebApplication app)
     {
+        app.MapControllers();
         app.UseSwagger();
         app.UseSwaggerUI();
 
