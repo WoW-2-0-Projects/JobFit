@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
-using JobFit.Api.Formatters.RequestFormatters;
 using JobFit.Application.Common.EventBus.Brokers;
+using JobFit.Application.Common.FileStorage.Brokers;
+using JobFit.Application.Common.FileStorage.Services;
 using JobFit.Application.Common.Identity.Services;
 using JobFit.Application.Common.Serializers.Brokers;
 using JobFit.Application.Employees.Services;
@@ -9,6 +10,9 @@ using JobFit.Infrastructure.Common.Caching.Brokers;
 using JobFit.Infrastructure.Common.Caching.Settings;
 using JobFit.Infrastructure.Common.EventBus.Brokers;
 using JobFit.Infrastructure.Common.EventBus.Extensions;
+using JobFit.Infrastructure.Common.FileStorage.Brokers;
+using JobFit.Infrastructure.Common.FileStorage.Services;
+using JobFit.Infrastructure.Common.FileStorage.Settings;
 using JobFit.Infrastructure.Common.Identity.Services;
 using JobFit.Infrastructure.Common.Serializers.Brokers;
 using JobFit.Infrastructure.Common.Settings;
@@ -150,6 +154,33 @@ public static partial class HostConfiguration
         return builder;
     }
     
+    // <summary>
+    /// Registers file storage infrastructure
+    /// </summary>
+    private static WebApplicationBuilder AddFileStorageInfrastructure(this WebApplicationBuilder builder)
+    {
+        // Register settings
+        builder.Services
+            .Configure<LocalFileStorageSettings>(options => options.RootPath = builder.Environment.WebRootPath)
+            .Configure<DomainSettings>(builder.Configuration.GetSection(nameof(DomainSettings)));
+
+        // Register brokers
+        builder.Services
+            .AddSingleton<IFileContentTypeProvider, FileContentTypeProvider>()
+            .AddScoped<IFileStorageBroker, LocalFileStorageBroker>();
+
+        // Register repositories
+        builder.Services.AddScoped<IStorageFileRepository, StorageFileRepository>();
+
+        // Register foundation services
+        builder.Services.AddScoped<IStorageFileService, StorageFileService>();
+
+        // Register processing services
+        builder.Services.AddScoped<IStorageFileProcessingService, StorageFileProcessingService>();
+
+        return builder;
+    }
+    
     /// <summary>
     /// Registers mediatr infrastructure
     /// </summary>
@@ -212,7 +243,7 @@ public static partial class HostConfiguration
         builder.Services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
         builder.Services.AddRouting(options => options.LowercaseUrls = true);
         builder.Services
-            .AddControllers(options => { options.InputFormatters.Add(new DefaultTextInputFormatter()); }) 
+            .AddControllers() 
             .AddNewtonsoftJson();
 
         return builder;

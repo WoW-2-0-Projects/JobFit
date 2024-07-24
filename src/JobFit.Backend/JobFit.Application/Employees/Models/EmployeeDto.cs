@@ -21,9 +21,4 @@ public sealed record EmployeeDto
     /// Gets the Email address of the employee.
     /// </summary>
     public string EmailAddress { get; set; } = default!;
-
-    /// <summary>
-    /// Gets the employee resume photo storage ID 
-    /// </summary>
-    public Guid ResumeId { get; init; }
 }

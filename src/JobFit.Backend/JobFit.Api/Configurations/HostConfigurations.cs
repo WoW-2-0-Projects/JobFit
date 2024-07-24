@@ -15,6 +15,7 @@ public static partial class HostConfiguration
             .AddIdentityInfrastructure()
             .AddEmployeeInfrastructure()
             .AddInfraComms()
+            .AddFileStorageInfrastructure()
             .AddMediator()
             .AddCors()
             .AddDevTools()
@@ -33,8 +34,8 @@ public static partial class HostConfiguration
 
         app
             .UseCors()
-            .UseDevTools();
-            // .UseLocalFileStorage();
+            .UseDevTools()
+            .UseLocalFileStorage();
         
         return app;
     }

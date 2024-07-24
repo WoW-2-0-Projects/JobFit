@@ -9,7 +9,7 @@ public class EmployeeController(IMediator mediator) : ControllerBase
 {
     
     [HttpPost]
-    public async ValueTask<IActionResult> CreateEmployee([FromBody]CreateEmployeeCommand command,CancellationToken cancellationToken)
+    public async ValueTask<IActionResult> CreateEmployee(IFormFile file,[FromForm]CreateEmployeeCommand command,CancellationToken cancellationToken)
     {
         var result = await mediator.Send(command,cancellationToken);
         return Ok(result);
