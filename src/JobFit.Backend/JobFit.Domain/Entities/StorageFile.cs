@@ -38,12 +38,7 @@ public sealed class StorageFile : EntityBase, IAuditableEntity
     public ulong Size { get; set; }
     
     public Employee Owner { get; set; } = default!;
-
-    /// <summary>
-    /// Gets or sets the path parameters.
-    /// </summary>
-    public Dictionary<string, string> PathVariables { get; set; } = default!;
-
+    
     public DateTimeOffset CreatedTime { get; set; }
 
     public DateTimeOffset? ModifiedTime { get; set; }

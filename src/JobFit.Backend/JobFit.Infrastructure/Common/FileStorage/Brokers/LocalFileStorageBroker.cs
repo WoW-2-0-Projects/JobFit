@@ -3,6 +3,7 @@ using JobFit.Domain.Entities;
 using JobFit.Domain.Extensions;
 using JobFit.Infrastructure.Common.FileStorage.Settings;
 using JobFit.Infrastructure.Common.Settings;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
 namespace JobFit.Infrastructure.Common.FileStorage.Brokers;
